@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FREETIME SERVICE</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f9f9f9;
+    }
+    header {
+      background-color: #0a74da;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      background-color: #084c9e;
+      text-align: center;
+      padding: 10px 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 30px;
+    }
+    .product {
+      background-color: white;
+      border: 1px solid #ddd;
+      margin: 15px;
+      padding: 20px;
+      width: 220px;
+      text-align: center;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .product h3 {
+      margin: 15px 0 10px;
+    }
+    .product button {
+      background-color: #0a74da;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #eee;
+      margin-top: 30px;
+    }
+    @media (max-width: 768px) {
+      .products {
+        flex-direction: column;
+        align-items: center;
+      }
+      .product {
+        width: 90%;
+        margin-bottom: 20px;
+      }
+      nav a {
+        display: block;
+        margin: 10px 0;
+      }
+      input, textarea {
+        width: 90%;
+        padding: 10px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>FREETIME SERVICE</h1>
+  <p>Votre boutique en ligne de confiance</p>
+</header>
+
+<nav>
+  <a href="#produits">Produits</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<section id="produits" class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/200" alt="Produit 1">
+    <h3>Montre connectée</h3>
+    <p>Prix : 20 000 FCFA</p>
+    <button onclick="addToCart('Montre connectée', 20000)">Ajouter au panier</button>
+  </div>
+  <div class="product">
+    <img src="https://via.placeholder.com/200" alt="Produit 2">
+    <h3>Écouteurs Bluetooth</h3>
+    <p>Prix : 15 000 FCFA</p>
+    <button onclick="addToCart('Écouteurs Bluetooth', 15000)">Ajouter au panier</button>
+  </div>
+</section>
+
+<section style="padding: 30px; text-align: center;">
+  <h2>🛒 Panier</h2>
+  <div id="cart"></div>
+  <p id="total"></p>
+</section>
+
+<section id="commande" style="padding: 30px; text-align: center;">
+  <h2>📦 Passer une commande</h2>
+  <form onsubmit="sendWhatsApp(event)">
+    <input type="text" id="clientName" placeholder="Votre nom" required><br><br>
+    <input type="tel" id="clientPhone" placeholder="Votre numéro (ex: 77 XX XX XX)" required><br><br>
+    <textarea id="clientAddress" placeholder="Votre adresse complète" required></textarea><br><br>
+    <button type="submit" style="background-color:#25D366; color:white; padding:10px 20px; border:none; border-radius:5px;">Envoyer par WhatsApp</button>
+  </form>
+  <p style="margin-top: 20px;"><strong>💳 Paiement Orange Money :</strong></p>
+  <p>Envoyez le montant à <strong>+223 91 60 30 66</strong> (Nom : Dramane S.)<br>Après paiement, envoyez le reçu par WhatsApp.</p>
+</section>
+
+<section id="contact" style="padding: 30px; text-align: center;">
+  <h2>Contact</h2>
+  <p>Email : sdramane121@gmail.com</p>
+  <p>Téléphone : +223 91 60 30 66</p>
+</section>
+
+<footer>
+  &copy; 2025 FREETIME SERVICE. Tous droits réservés.
+</footer>
+
+<script>
+  let cart = [];
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    updateCart();
+  }
+  function updateCart() {
+    const cartDiv = document.getElementById('cart');
+    const totalDiv = document.getElementById('total');
+    cartDiv.innerHTML = '';
+    let total = 0;
+    cart.forEach((item, index) => {
+      cartDiv.innerHTML += `<p>${item.name} - ${item.price} FCFA 
+        <button onclick="removeItem(${index})">Retirer</button></p>`;
+      total += item.price;
+    });
+    totalDiv.innerHTML = `<strong>Total : ${total} FCFA</strong>`;
+  }
+  function removeItem(index) {
+    cart.splice(index, 1);
+    updateCart();
+  }
+  function sendWhatsApp(event) {
+    event.preventDefault();
+    let name = document.getElementById('clientName').value;
+    let phone = document.getElementById('clientPhone').value;
+    let address = document.getElementById('clientAddress').value;
+    if (cart.length === 0) {
+      alert("Votre panier est vide !");
+      return;
+    }
+    let message = `🛒 *Commande FREETIME SERVICE* 
+
+👤 Nom : ${name}
+📞 Téléphone : ${phone}
+🏠 Adresse : ${address}
+
+📦 Produits commandés :
+`;
+    let total = 0;
+    cart.forEach(item => {
+      message += `- ${item.name} (${item.price} FCFA)
+`;
+      total += item.price;
+    });
+    message += `
+💰 Total : ${total} FCFA
+
+📲 *Mode de paiement : Orange Money*`;
+    let whatsappNumber = "22391603066";
+    let url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - FREETIME SERVICE</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    label, input, textarea { display: block; margin-top: 10px; width: 100%; max-width: 400px; }
+    button { margin-top: 15px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>Ajouter un produit</h1>
+  <form onsubmit="addProduct(event)">
+    <label>Nom du produit</label>
+    <input id="prodName" required>
+    <label>Prix</label>
+    <input id="prodPrice" type="number" required>
+    <label>URL de l’image</label>
+    <input id="prodImage" required>
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <h2>Code généré :</h2>
+  <pre id="output"></pre>
+
+  <script>
+    function addProduct(e) {
+      e.preventDefault();
+      const name = document.getElementById("prodName").value;
+      const price = document.getElementById("prodPrice").value;
+      const image = document.getElementById("prodImage").value;
+
+      const code = `
+<div class="product">
+  <img src="${image}" alt="${name}">
+  <h3>${name}</h3>
+  <p>Prix : ${price} FCFA</p>
+  <button onclick="addToCart('${name}', ${price})">Ajouter au panier</button>
+</div>`;
+      document.getElementById("output").innerText = code.trim();
+    }
+  </script>
+</body>
+</html>
